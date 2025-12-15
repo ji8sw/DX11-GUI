@@ -6,8 +6,10 @@ void GUIRenderer::Initialize(ID3D11Device* Device, ID3D11DeviceContext* Context,
 {
 	m_Device = Device;
 	m_Context = Context;
+	m_Width = Width;
+	m_Height = Height;
 
-	m_ShapeRenderer.Initialize(m_Device, m_Context, Width, Height);
+	m_ShapeRenderer.Initialize(m_Device, m_Context, m_Width, m_Height);
 
 	// Load font
 	auto ListTextureData = Files::LoadResource(MAKEINTRESOURCE(IDB_FONT1), MAKEINTRESOURCE(RT_RCDATA));
@@ -22,16 +24,16 @@ void GUIRenderer::BeginFrame(ID3D11DeviceContext* Context)
 
 void GUIRenderer::EndFrame()
 {
-	for (const auto& Command : TextQueue)
+	for (const auto& Command : m_TextQueue)
 	{
 		m_TextRenderer.Draw(Command.Text.c_str(), Command.X, Command.Y, Command.Colour, Command.Scale);
 	}
-	TextQueue.clear();
+	m_TextQueue.clear();
 
 	m_ShapeRenderer.EndFrame();
 	m_TextRenderer.EndFrame();
 
-	for (const auto& Command : TextureQueue)
+	for (const auto& Command : m_TextureQueue)
 	{
 		auto It = m_TextureRenderers.find(Command.Name);
 		if (It != m_TextureRenderers.end())
@@ -41,7 +43,7 @@ void GUIRenderer::EndFrame()
 			It->second.EndFrame();
 		}
 	}
-	TextureQueue.clear();
+	m_TextureQueue.clear();
 }
 
 void GUIRenderer::OnResize(int Width, int Height)

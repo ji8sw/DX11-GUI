@@ -4,6 +4,7 @@
 #include <functional>
 
 #define MenuName "Stand"
+#define WideMenuName L"Stand"
 #define MenuVersion "25.12.1"
 
 #ifndef NDEBUG
@@ -22,10 +23,8 @@ enum CommandType
 	CT_List,
 	CT_Toggle,
 	CT_Slider,
+	CT_Divider
 };
-
-const DirectX::XMVECTORF32 NormalColour = { 0.0f, 0.0f, 0.0f, 0.3019f };
-const DirectX::XMVECTORF32 ActiveColour = { 1, 0, 1, 1 };
 
 /*
 	A command is a feature.
@@ -48,6 +47,17 @@ public:
 	{
 		if (OnClickCallback)
 			OnClickCallback();
+	}
+
+	virtual void RegisterCommandName(const std::string& InCommandName)
+	{
+		CommandNames.push_back(InCommandName);
+	}
+
+	virtual void RegisterCommandNames(const std::vector<std::string>& InCommandNames)
+	{
+		for (const auto& Name : InCommandNames)
+			CommandNames.push_back(Name);
 	}
 
 	// Type identification
@@ -74,7 +84,7 @@ public:
 	std::vector<std::shared_ptr<Command>> Commands;
 	std::vector<std::shared_ptr<class List>> ListChain; // Chain of opened lists, so we can go back
 
-	void Draw(class GUIRenderer& GUI, float& PencilX, float& PencilY, bool Hovered);
+	virtual void Draw(class GUIRenderer& GUI, float& PencilX, float& PencilY, bool Hovered);
 	
 	template<typename T>
 	std::shared_ptr<T> Add(std::unique_ptr<T> InCommand)
@@ -159,14 +169,17 @@ public:
 	int SelectedCommandIndex = 0;
 	const char* AddressDenominator = " / ";
 
+	DirectX::XMVECTORF32 NormalColour = { 0.0f, 0.0f, 0.0f, 0.3019f };
+	DirectX::XMVECTORF32 ActiveColour = { 1, 0, 1, 1 };
+
 	std::vector<std::shared_ptr<Tab>> Tabs;
 
 	GUIRenderer GUI;
 
-	void DrawRoot();
-	void HandleInput(class InputHandler& Input);
+	virtual void DrawRoot();
+	virtual void HandleInput(class InputHandler& Input);
 
-	std::string GetAddressText();
+	virtual std::string GetAddressText();
 
 	bool DoesSelectedCommandIndexExist(); // checks for your command index in the current tab or list
 
@@ -209,7 +222,7 @@ public:
 		return nullptr;
 	}
 
-	std::shared_ptr<Command> GetSelectedCommand(); // returns the currently selected command in the current tab or list
+	virtual std::shared_ptr<Command> GetSelectedCommand(); // returns the currently selected command in the current tab or list
 };
 
 extern MenuRoot Menu;

@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include <iostream>
+#include "MenuRoot.hpp" // for MenuName
 
 namespace Logger
 {
@@ -13,7 +14,7 @@ namespace Logger
 
 	static void LOG(const std::string& Msg)
 	{
-		std::cout << "[DX11]: " << Msg << std::endl;
+		std::cout << std::format("[{}]: {}", MenuName, Msg) << std::endl;
 	}
 }
 

@@ -22,6 +22,11 @@
 #include "TabGame.hpp"
 #include "TabStand.hpp"
 
+#define TRANSPARENT_WINDOW
+#ifdef TRANSPARENT_WINDOW
+POINTS WindowPosition = { 0, 0 };
+#endif
+
 LRESULT WINAPI WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam)
 {
     switch (Message)
@@ -43,6 +48,31 @@ LRESULT WINAPI WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam)
         }
 		Menu.GUI.OnResize(LOWORD(LParam), HIWORD(LParam));
 		return 0L;
+#ifdef TRANSPARENT_WINDOW
+    case WM_MOUSEMOVE:
+        if (WParam == MK_LBUTTON)
+        {
+            const auto points = MAKEPOINTS(LParam);
+            auto rect = RECT{ };
+
+            GetWindowRect(Window, &rect);
+
+            rect.left += points.x - WindowPosition.x;
+            rect.top += points.y - WindowPosition.y;
+
+            auto WindowSize = Menu.GUI.GetWindowSize();
+            rect.left -= WindowSize.x / 2;
+			rect.top -= WindowSize.y / 2;
+
+            SetWindowPos(
+                Window,
+                HWND_TOPMOST,
+                rect.left, rect.top,
+                0, 0,
+                SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOZORDER
+            );
+        }
+#endif
     }
 
     return DefWindowProc(Window, Message, WParam, LParam);
@@ -50,7 +80,7 @@ LRESULT WINAPI WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam)
 
 INT APIENTRY WinMain(HINSTANCE Instance, HINSTANCE, PSTR, INT ShowCMD)
 {
-    WNDCLASSEXW WC = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"Stand", NULL};
+    WNDCLASSEXW WC = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, WideMenuName, NULL};
 
     RegisterClassExW(&WC);
 
@@ -61,9 +91,13 @@ INT APIENTRY WinMain(HINSTANCE Instance, HINSTANCE, PSTR, INT ShowCMD)
         0,
         WC.lpszClassName,
         WC.lpszClassName,
-        WS_OVERLAPPEDWINDOW,
-        0,
-        0,
+#ifdef TRANSPARENT_WINDOW
+        WS_POPUP,
+#else
+		WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX,
+#endif
+        100,
+        100,
         WindowWidth, // X
         WindowHeight, // Y
         nullptr,
@@ -71,6 +105,11 @@ INT APIENTRY WinMain(HINSTANCE Instance, HINSTANCE, PSTR, INT ShowCMD)
         WC.hInstance,
         nullptr
     );
+
+#ifdef TRANSPARENT_WINDOW
+    MARGINS M = { -1 };
+    DwmExtendFrameIntoClientArea(Window, &M);
+#endif
 
     DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
     SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -122,13 +161,29 @@ INT APIENTRY WinMain(HINSTANCE Instance, HINSTANCE, PSTR, INT ShowCMD)
     ShowWindow(Window, ShowCMD);
     UpdateWindow(Window);
 
+#ifdef TRANSPARENT_WINDOW
+	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc = {};
+    DepthStencilDesc.DepthEnable = FALSE;
+    DepthStencilDesc.StencilEnable = FALSE;
+    ID3D11DepthStencilState* DSState = nullptr;
+    Device->CreateDepthStencilState(&DepthStencilDesc, &DSState);
+    DeviceContext->OMSetDepthStencilState(DSState, 0);
+
+    D3D11_BLEND_DESC BlendDesc = {};
+    BlendDesc.RenderTarget[0].BlendEnable = FALSE;
+    BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    ID3D11BlendState* BlendState = nullptr;
+    Device->CreateBlendState(&BlendDesc, &BlendState);
+    DeviceContext->OMSetBlendState(BlendState, nullptr, 0xffffffff);
+#endif
+
     D3D11_RASTERIZER_DESC RastDesc = {};
     RastDesc.ScissorEnable = FALSE;
     RastDesc.FillMode = D3D11_FILL_SOLID;
     RastDesc.CullMode = D3D11_CULL_NONE;
-    ID3D11RasterizerState* pRasterState = nullptr;
-    Device->CreateRasterizerState(&RastDesc, &pRasterState);
-    DeviceContext->RSSetState(pRasterState);
+    ID3D11RasterizerState* RasterState = nullptr;
+    Device->CreateRasterizerState(&RastDesc, &RasterState);
+    DeviceContext->RSSetState(RasterState);
 
     D3D11_VIEWPORT VP{};
     VP.Width = WindowWidth;
@@ -187,7 +242,11 @@ INT APIENTRY WinMain(HINSTANCE Instance, HINSTANCE, PSTR, INT ShowCMD)
         if (!Running)
             break;
 
+#ifdef TRANSPARENT_WINDOW
+        constexpr float Colour[4]{ 0.0f, 0.0f, 0.0f, 0.f };
+#else
         constexpr float Colour[4]{ 0.1f, 0.1f, 0.1f, 1.f };
+#endif
         DeviceContext->OMSetRenderTargets(1U, &RenderTargetView, nullptr);
         DeviceContext->ClearRenderTargetView(RenderTargetView, Colour);
 

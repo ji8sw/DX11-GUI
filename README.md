@@ -4,7 +4,7 @@ Easily create GUI using DirectX11 and DirectXTK
 
 DX11 GUI is a simple library built on top of DirectX11 and DirectXTK to facilitate the creation of graphical user interfaces in DirectX11 applications. It provides a set of tools and components to help developers create menus, buttons, sliders, and other UI elements with ease.
 
-DX11 GUI can be built as a standalone `.exe` or as an injectable DLL for use in games and other applications.
+DX11 GUI can be built as a standalone `.exe` or as an injectable `.dll` for use in games and other applications.
 
 DX11 GUI already provides a UI and when built, can immediately be injected into a DirectX11 application to display the GUI.
 

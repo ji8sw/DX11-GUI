@@ -10,34 +10,34 @@ class InputHandler
 public:
 	struct Hotkey
 	{
-		unsigned int VK;
-		bool LastState = false;
-		bool BlockGameInputWhenMenuOpen = false;
+		unsigned int m_VK;
+		bool m_LastState = false;
+		bool m_BlockGameInputWhenMenuOpen = false;
 
 		// Repeat handling
-		int RepeatCount = 0;
-		int RepeatDelay = 400;             // milliseconds
-		static constexpr int InitialDelay = 400;      // first delay before repeat
-		static constexpr int MinDelay = 50;           // fastest repeat speed
-		static constexpr int AccelerationStep = 40;   // decrease delay each repeat
-		std::chrono::steady_clock::time_point LastTime;
+		int m_RepeatCount = 0;
+		int m_RepeatDelay = 400;             // milliseconds
+		static constexpr int m_InitialDelay = 400;      // first delay before repeat
+		static constexpr int m_MinDelay = 50;           // fastest repeat speed
+		static constexpr int m_AccelerationStep = 40;   // decrease delay each repeat
+		std::chrono::steady_clock::time_point m_LastTime;
 
-		Hotkey(unsigned int InVK, bool InBlockGameInputWhenMenuOpen = false)
-			: VK(InVK), BlockGameInputWhenMenuOpen(InBlockGameInputWhenMenuOpen)
+		Hotkey(unsigned int VK, bool BlockGameInputWhenMenuOpen = false)
+			: m_VK(VK), m_BlockGameInputWhenMenuOpen(BlockGameInputWhenMenuOpen)
 		{
 		}
 		Hotkey() = default;
 
 		bool IsDown() const
 		{
-			return (GetAsyncKeyState(VK) & 0x8000) != 0;
+			return (GetAsyncKeyState(m_VK) & 0x8000) != 0;
 		}
 
 		bool WasReleased()
 		{
 			bool CurrentState = IsDown();
-			bool Pressed = !CurrentState && LastState;
-			LastState = CurrentState;
+			bool Pressed = !CurrentState && m_LastState;
+			m_LastState = CurrentState;
 			return Pressed;
 		}
 
@@ -48,31 +48,31 @@ public:
 
 			if (!IsDown()) 
 			{
-				RepeatCount = 0;
-				RepeatDelay = InitialDelay;
+				m_RepeatCount = 0;
+				m_RepeatDelay = m_InitialDelay;
 				return false;
 			}
 
-			if (RepeatCount == 0) 
+			if (m_RepeatCount == 0)
 			{
 				// First repeat happens after initial delay
-				if (duration_cast<milliseconds>(Now - LastTime).count() >= RepeatDelay) 
+				if (duration_cast<milliseconds>(Now - m_LastTime).count() >= m_RepeatDelay)
 				{
-					LastTime = Now;
-					RepeatCount++;
+					m_LastTime = Now;
+					m_RepeatCount++;
 					// accelerate by decreasing delay
-					RepeatDelay = (std::max)(MinDelay, RepeatDelay - AccelerationStep);
+					m_RepeatDelay = (std::max)(m_MinDelay, m_RepeatDelay - m_AccelerationStep);
 					return false;
 				}
 			}
 			else 
 			{
 				// Subsequent repeats
-				if (duration_cast<milliseconds>(Now - LastTime).count() >= RepeatDelay) 
+				if (duration_cast<milliseconds>(Now - m_LastTime).count() >= m_RepeatDelay)
 				{
-					LastTime = Now;
-					RepeatCount++;
-					RepeatDelay = (std::max)(MinDelay, RepeatDelay - AccelerationStep);
+					m_LastTime = Now;
+					m_RepeatCount++;
+					m_RepeatDelay = (std::max)(m_MinDelay, m_RepeatDelay - m_AccelerationStep);
 					return true;
 				}
 			}

@@ -60,6 +60,9 @@
     <ClCompile Include="Kiero\kiero.cpp">
       <Filter>UI\Kiero</Filter>
     </ClCompile>
+    <ClCompile Include="Divider.cpp">
+      <Filter>UI\Command Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shapes.hpp">
@@ -127,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="Kiero\kiero.h">
       <Filter>UI\Kiero</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandTypeIncludes.hpp">
+      <Filter>UI\Command Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Divider.hpp">
+      <Filter>UI\Command Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

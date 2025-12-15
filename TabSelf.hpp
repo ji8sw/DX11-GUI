@@ -1,8 +1,5 @@
 #pragma once
-#include "MenuRoot.hpp"
-#include "List.hpp"
-#include "Slider.hpp"
-#include "Toggle.hpp"
+#include "CommandTypeIncludes.hpp"
 
 namespace Tabs::Self
 {
@@ -13,13 +10,14 @@ namespace Tabs::Self
 		std::unique_ptr<List> MovementList = std::make_unique<List>("Movement");
 		{
 			std::unique_ptr<List> LevitationList = std::make_unique<List>("Levitation");
+			{
+				std::unique_ptr<SliderFloat> MovementSpeed = std::make_unique<SliderFloat>("Movement Speed", 0.01, 10000.0f, 1.0f);
+				LevitationList->Commands.push_back(std::move(MovementSpeed));
+
+				std::unique_ptr<Command> SprintMult = std::make_unique<Command>("Sprint Multiplier");
+				LevitationList->Commands.push_back(std::move(SprintMult));
+			}
 			MovementList->Commands.push_back(std::move(LevitationList));
-
-			std::unique_ptr<SliderFloat> MovementSpeed = std::make_unique<SliderFloat>("Movement Speed", 0.01, 10000.0f, 1.0f);
-			MovementList->Commands.push_back(std::move(MovementSpeed));
-
-			std::unique_ptr<Command> SprintMult = std::make_unique<Command>("Sprint Multiplier");
-			MovementList->Commands.push_back(std::move(SprintMult));
 		}
 		This->Add<List>(std::move(MovementList));
 

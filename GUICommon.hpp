@@ -19,6 +19,9 @@ private:
 	TextRenderer m_TextRenderer;
 	std::unordered_map<std::string, TextureRenderer> m_TextureRenderers;
 
+	int m_Width = 800;
+	int m_Height = 600;
+
 	/*
 		Text is supposed to be drawn at a specific point in rendering, so we queue it and draw it at the end of the frame.
 	*/
@@ -30,7 +33,7 @@ private:
 		DirectX::XMVECTORF32 Colour;
 		float Scale = 1.0f;
 	};
-	std::vector<TextDrawCommand> TextQueue;
+	std::vector<TextDrawCommand> m_TextQueue;
 
 	/*
 		Textures are supposed to be drawn after everything else
@@ -44,7 +47,7 @@ private:
 		float ScaleX = 1.0f;
 		float ScaleY = 1.0f;
 	};
-	std::vector<TextureDrawCommand> TextureQueue;
+	std::vector<TextureDrawCommand> m_TextureQueue;
 
 	// DX Objects
 	ID3D11Device* m_Device = nullptr;
@@ -53,6 +56,10 @@ private:
 public:
 	ID3D11Device* GetDevice() { return m_Device; }
 	ID3D11DeviceContext* GetContext() { return m_Context; }
+	DirectX::XMFLOAT2 GetWindowSize()
+	{
+		return DirectX::XMFLOAT2(static_cast<float>(m_Width), static_cast<float>(m_Height));
+	}
 
 	void Initialize(ID3D11Device* Device, ID3D11DeviceContext* Context, int Width, int Height);
 	void BeginFrame(ID3D11DeviceContext* Context);
@@ -86,7 +93,7 @@ public:
 	// Text Drawing Functions
 	inline void AddText(const char* Text, float X, float Y, DirectX::XMVECTORF32 Colour, float Scale = 1.0f)
 	{ 
-		TextQueue.push_back({ Text, X, Y, Colour, Scale });
+		m_TextQueue.push_back({ Text, X, Y, Colour, Scale });
 	}
 
 	float GetTextWidth(const char* Text, float Scale = 1.0f)
@@ -119,7 +126,7 @@ public:
 
 	void AddTexture(const std::string& Name, float X, float Y, DirectX::XMVECTORF32 Colour, float ScaleX, float ScaleY)
 	{
-		TextureQueue.push_back({ Name, X, Y, Colour, ScaleX, ScaleY });
+		m_TextureQueue.push_back({ Name, X, Y, Colour, ScaleX, ScaleY });
 	}
 
 	inline void AddTexture(const std::string& Name, float X, float Y, DirectX::XMVECTORF32 Colour = { 1, 1, 1, 1 }, float Scale = 1.0f)

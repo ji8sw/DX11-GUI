@@ -2,7 +2,7 @@
 
 void List::Draw(GUIRenderer& GUI, float& PencilX, float& PencilY, float RemainingWidth, bool Hovered)
 {
-	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? ActiveColour : NormalColour);
+	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? Menu.ActiveColour : Menu.NormalColour);
 	GUI.AddTexture("List", PencilX + RemainingWidth - (Height * 0.75f), PencilY, { 1, 1, 1, 1 }, 0.13f);
 	GUI.AddText(Name.c_str(), PencilX, PencilY + (Height / 8), { 1, 1, 1, 1 }, COMMAND_TEXT_SIZE);
 	PencilY += Height;

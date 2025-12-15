@@ -1,5 +1,6 @@
 #pragma once
 #include "MenuRoot.hpp"
+#include "Toggle.hpp"
 
 namespace Tabs::Stand
 {

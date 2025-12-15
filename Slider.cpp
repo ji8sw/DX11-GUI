@@ -3,15 +3,8 @@
 
 void Slider::Draw(GUIRenderer& GUI, float& PencilX, float& PencilY, float RemainingWidth, bool Hovered)
 {
-	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? ActiveColour : NormalColour);
+	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? Menu.ActiveColour : Menu.NormalColour);
 
-	auto Texture = GUI.GetTexture("List");
-	auto Device = GUI.GetDevice();
-	auto TextureSize = Texture->GetTextureSize(Device);
-	float CenterX = TextureSize.x / 2.0f;
-	float CenterY = TextureSize.y / 2.0f;
-	CenterX *= 0.10f; // scale down
-	CenterY *= 0.10f; // scale down
 	std::string ValueText = "";
 	if (Hovered)
 		ValueText = std::format("< {} >", CurrentValue);
@@ -47,15 +40,8 @@ void Slider::OnRightAdjust()
 
 void SliderFloat::Draw(GUIRenderer& GUI, float& PencilX, float& PencilY, float RemainingWidth, bool Hovered)
 {
-	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? ActiveColour : NormalColour);
+	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? Menu.ActiveColour : Menu.NormalColour);
 
-	auto Texture = GUI.GetTexture("List");
-	auto Device = GUI.GetDevice();
-	auto TextureSize = Texture->GetTextureSize(Device);
-	float CenterX = TextureSize.x / 2.0f;
-	float CenterY = TextureSize.y / 2.0f;
-	CenterX *= 0.10f; // scale down
-	CenterY *= 0.10f; // scale down
 	std::string ValueText = "";
 	if (Hovered)
 		ValueText = std::format("< {:.2f} >", fCurrentValue);

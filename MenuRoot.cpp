@@ -99,8 +99,17 @@ void MenuRoot::HandleInput(InputHandler& Input)
 		if (Input.Hotkeys["Up"].WasReleased() || Input.Hotkeys["Up"].IsRepeating())
 		{
 			SelectedCommandIndex -= 1;
+
+			if (DoesSelectedCommandIndexExist() && GetSelectedCommand()->GetType() == CT_Divider)
+				SelectedCommandIndex -= 1; // skip dividers
+
 			if (SelectedCommandIndex < 0)
-				SelectedCommandIndex = Tabs[SelectedTabIndex]->Commands.size() - 1;
+			{
+				if (!Tabs[SelectedTabIndex]->ListChain.empty())
+					SelectedCommandIndex = Tabs[SelectedTabIndex]->ListChain.back()->Commands.size() - 1;
+				else
+					SelectedCommandIndex = Tabs[SelectedTabIndex]->Commands.size() - 1;
+			}
 			if (DoesSelectedCommandIndexExist() == false)
 				SelectedCommandIndex = 0;
 		}
@@ -108,6 +117,10 @@ void MenuRoot::HandleInput(InputHandler& Input)
 		if (Input.Hotkeys["Down"].WasReleased() || Input.Hotkeys["Down"].IsRepeating())
 		{
 			SelectedCommandIndex += 1;
+
+			if (DoesSelectedCommandIndexExist() && GetSelectedCommand()->GetType() == CT_Divider)
+				SelectedCommandIndex += 1; // skip dividers
+
 			if (DoesSelectedCommandIndexExist() == false)
 				SelectedCommandIndex = 0;
 		}
@@ -267,14 +280,14 @@ std::shared_ptr<Command> MenuRoot::GetSelectedCommand()
 
 void Tab::Draw(GUIRenderer& GUI, float& PencilX, float& PencilY, bool Hovered)
 {
-	GUI.DrawFilledRect(PencilX, PencilY, Width, Height, Hovered ? ActiveColour : NormalColour);
+	GUI.DrawFilledRect(PencilX, PencilY, Width, Height, Hovered ? Menu.ActiveColour : Menu.NormalColour);
 	GUI.AddText(Name.c_str(), PencilX, PencilY + (Height / 8), { 1, 1, 1, 1 }, COMMAND_TEXT_SIZE);
 	PencilY += Height;
 }
 
 void Command::Draw(GUIRenderer& GUI, float& PencilX, float& PencilY, float RemainingWidth, bool Hovered)
 {
-	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? ActiveColour : NormalColour);
+	GUI.DrawFilledRect(PencilX, PencilY, RemainingWidth, Height, Hovered ? Menu.ActiveColour : Menu.NormalColour);
 	GUI.AddText(Name.c_str(), PencilX, PencilY + (Height / 8), {1, 1, 1, 1}, COMMAND_TEXT_SIZE);
 	PencilY += Height;
 }
