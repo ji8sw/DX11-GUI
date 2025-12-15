@@ -362,5 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-./DXTK/
-./DX11 GUI/
+DX11 GUI/
+/DXTK/
