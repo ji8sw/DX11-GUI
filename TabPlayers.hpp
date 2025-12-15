@@ -36,7 +36,12 @@ namespace Tabs::Players
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<Command>("Invite To Pong")));
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<List>("Increment Commend/Report Stats")));
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<List>("Kick")));
-			PlayerMenu->Commands.push_back(std::move(std::make_unique<List>("Crash")));
+			auto CrashList = std::make_unique<List>("Crash");
+			{
+				CrashList->Commands.push_back(std::move(std::make_unique<Command>("Elegant")));
+				CrashList->Commands.push_back(std::move(std::make_unique<Command>("Vehicular Manslaughter")));
+			}
+			PlayerMenu->Commands.push_back(std::move(CrashList));
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<Toggle>("Timeout")));
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<List>("Network Events")));
 			PlayerMenu->Commands.push_back(std::move(std::make_unique<List>("Incoming Syncs")));

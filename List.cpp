@@ -15,5 +15,6 @@ void List::OnClick()
 		std::shared_ptr<List> Self = std::make_shared<List>(*this);
 
 		Menu.Tabs[Menu.SelectedTabIndex]->ListChain.push_back(Self);
+		Menu.SelectedCommandIndex = 0;
 	}
 }

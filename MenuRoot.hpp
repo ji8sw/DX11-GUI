@@ -144,7 +144,7 @@ public:
 	The tabs are then below and on the left of the menu root.
 	The tab features are then to the right of the tabs.
 
-	[       Menu Root     ]
+	[ Menu Root       1/4 ]
 	[ Tab 1 ] [ Feature 1 ]
 	[ Tab 2 ] [ Feature 2 ]
 	[ Tab 3 ] [ Feature 3 ]
@@ -168,6 +168,12 @@ public:
 	int SelectedTabIndex = 0;
 	int SelectedCommandIndex = 0;
 	const char* AddressDenominator = " / ";
+
+	// Scrolling
+	int VisibleStartIndex = 0;
+	int PreviousSelectedCommandIndex = 0;
+	int MaxVisibleCommands = 15;
+	int MoveDownAt = 2; // if there are more than this many commands, start moving the list up or down when the selected command reaches the second first/last visible command
 
 	DirectX::XMVECTORF32 NormalColour = { 0.0f, 0.0f, 0.0f, 0.3019f };
 	DirectX::XMVECTORF32 ActiveColour = { 1, 0, 1, 1 };

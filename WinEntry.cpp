@@ -72,7 +72,14 @@ LRESULT WINAPI WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam)
                 SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOZORDER
             );
         }
+        return TRUE;
 #endif
+    case WM_SETCURSOR:
+    {
+        HCURSOR Cursor = LoadCursor(nullptr, IDC_ARROW);
+        SetCursor(Cursor);
+        return TRUE;
+    }
     }
 
     return DefWindowProc(Window, Message, WParam, LParam);

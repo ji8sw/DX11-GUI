@@ -56,6 +56,8 @@ void MenuRoot::DrawRoot()
 			float OldPencilY = PencilY;
 			float OldPencilX = PencilX;
 
+			std::vector<std::shared_ptr<Command>> CommandsToDraw;
+
 			PencilX += CurrentTab->Width + RootPadding; // move pencil to the right of the tabs
 			PencilY = Y + RootHeight + RootPadding; // reset pencil Y to below root
 
@@ -68,10 +70,7 @@ void MenuRoot::DrawRoot()
 					auto& CurrentCommand = CurrentList->Commands[Index];
 					if (!CurrentCommand)
 						continue;
-
-					bool Active = (Index == SelectedCommandIndex);
-				
-					CurrentCommand->Draw(GUI, PencilX, PencilY, RemainingWidth, Active);
+					CommandsToDraw.push_back(CurrentCommand);
 				}
 			}
 			else // draw commands from the tab
@@ -79,10 +78,47 @@ void MenuRoot::DrawRoot()
 				for (size_t Index = 0; Index < CurrentTab->Commands.size(); ++Index)
 				{
 					auto& CurrentCommand = CurrentTab->Commands[Index];
-					bool Active = (Index == SelectedCommandIndex);
-
-					CurrentCommand->Draw(GUI, PencilX, PencilY, RemainingWidth, Active);
+					if (!CurrentCommand)
+						continue;
+					CommandsToDraw.push_back(CurrentCommand);
 				}
+			}
+
+			// scrolling
+			int Total = CommandsToDraw.size();
+			int StartIndex = VisibleStartIndex;
+			int EndIndex = Total;
+
+			if (Total > MaxVisibleCommands)
+			{
+				SelectedCommandIndex = std::clamp(SelectedCommandIndex, 0, Total - 1);
+
+				int MaxStart = Total - MaxVisibleCommands;
+				bool MovingDown = SelectedCommandIndex > PreviousSelectedCommandIndex;
+				bool MovingUp = SelectedCommandIndex < PreviousSelectedCommandIndex;
+
+				if (MovingDown &&
+					SelectedCommandIndex >= StartIndex + (MaxVisibleCommands - MoveDownAt))
+				{
+					StartIndex = SelectedCommandIndex - (MaxVisibleCommands - MoveDownAt);
+				}
+
+				if (MovingUp &&
+					SelectedCommandIndex <= StartIndex + MoveDownAt)
+				{
+					StartIndex = SelectedCommandIndex - MoveDownAt;
+				}
+
+				StartIndex = std::clamp(StartIndex, 0, MaxStart);
+				EndIndex = StartIndex + MaxVisibleCommands;
+				VisibleStartIndex = StartIndex;
+			}
+
+			for (size_t Index = StartIndex; Index < EndIndex; ++Index)
+			{
+				auto& CurrentCommand = CommandsToDraw[Index];
+				bool Active = (Index == SelectedCommandIndex);
+				CurrentCommand->Draw(GUI, PencilX, PencilY, RemainingWidth, Active);
 			}
 
 			// prepare for next tab
@@ -90,12 +126,15 @@ void MenuRoot::DrawRoot()
 			PencilY = OldPencilY;
 		}
 	}
+
+	PreviousSelectedCommandIndex = SelectedCommandIndex;
 }
 
 void MenuRoot::HandleInput(InputHandler& Input)
 {
 	if (DoesSelectedTabIndexExist())
 	{ // Command list input
+
 		if (Input.Hotkeys["Up"].WasReleased() || Input.Hotkeys["Up"].IsRepeating())
 		{
 			SelectedCommandIndex -= 1;
