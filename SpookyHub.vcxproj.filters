@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="UI">
+      <UniqueIdentifier>{e88a3496-b646-4a29-a2fc-6e87c445b494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Backend">
+      <UniqueIdentifier>{fb2c41f3-1db0-4e53-b415-ba510b60ba12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Application">
+      <UniqueIdentifier>{bc6d568b-1e81-4727-ae2c-9728033f4cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Tabs">
+      <UniqueIdentifier>{d4c5baa4-dd28-4b80-8279-edd7eb0756e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Command Types">
+      <UniqueIdentifier>{8d345df5-d575-4940-9cc6-23870fbed073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f5ef1e5c-69f7-4e3c-8159-f50b09427710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Kiero">
+      <UniqueIdentifier>{ec6d756a-65df-42f7-842c-cdc2db32df75}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinEntry.cpp">
+      <Filter>Test Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>UI\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>UI\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>UI\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="GUICommon.cpp">
+      <Filter>UI\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuRoot.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>UI\Command Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>UI\Command Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Toggle.cpp">
+      <Filter>UI\Command Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Files.cpp">
+      <Filter>UI\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLEntry.cpp">
+      <Filter>Test Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Kiero\kiero.cpp">
+      <Filter>UI\Kiero</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shapes.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="GUICommon.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuRoot.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TabSelf.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabVehicle.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabOnline.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabWorld.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabPlayers.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabStand.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="TabGame.hpp">
+      <Filter>UI\Tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.hpp">
+      <Filter>UI\Command Types</Filter>
+    </ClInclude>
+    <ClInclude Include="List.hpp">
+      <Filter>UI\Command Types</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuInput.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.hpp">
+      <Filter>UI\Command Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Toggle.hpp">
+      <Filter>UI\Command Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Files.hpp">
+      <Filter>UI\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Kiero\kiero.h">
+      <Filter>UI\Kiero</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bitmap1.bmp">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Resources\List.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Resources\Toggle Off.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Resources\Toggle On.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="font1.bin">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
