@@ -25,3 +25,6 @@ If you want to create a standalone `.exe`, you are welcome to delete `Kiero\` an
 - Already included is a recreation of the list UI from [Stand](https://stand.sh) for GTA 5.
 - The `Resources\` folder contains necessary textures and fonts, they are integrated into the project as resources, therefore you don't need to ship them.
 - If you wish you can swap out textures and fonts with your own either by changing resources or by loading them as files at runtime.
+
+# DirectX 12
+Visit [DX12 GUI](https://github.com/ji8sw/DX12-GUI) for the DirectX 12 version of this library.
